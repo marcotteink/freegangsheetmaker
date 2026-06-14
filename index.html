@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free Gang Sheet Maker | DTF Gang Sheet Builder &amp; Layout Optimizer</title>
+<meta name="description" content="Free online DTF gang sheet maker. Upload transparent PNGs, set quantities, and auto-pack them into a print-ready gang sheet with the least wasted film. No account, no fees, runs in your browser.">
+<meta name="keywords" content="free gang sheet maker, DTF gang sheet builder, gang sheet maker, DTF layout optimizer, build a gang sheet, gang sheet generator, screen printing gang sheet, DTF transfer sheet maker">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://freegangsheetmaker.com/">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Free Gang Sheet Maker | DTF Gang Sheet Builder">
+<meta property="og:description" content="Upload transparent PNGs and auto-pack them into a print-ready DTF gang sheet with the least wasted film. Free, no account, runs in your browser.">
+<meta property="og:url" content="https://freegangsheetmaker.com/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Free Gang Sheet Maker | DTF Gang Sheet Builder">
+<meta name="twitter:description" content="Upload transparent PNGs and auto-pack them into a print-ready DTF gang sheet with the least wasted film. Free, no account.">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "Free Gang Sheet Maker",
+      "url": "https://freegangsheetmaker.com/",
+      "applicationCategory": "DesignApplication",
+      "operatingSystem": "Any (web browser)",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "description": "A free, browser-based DTF gang sheet maker. Upload transparent PNG designs, set quantities, and automatically pack them into a print-ready gang sheet that minimizes wasted film. No account required and nothing is uploaded to a server.",
+      "featureList": [
+        "Automatic bin-packing layout optimization",
+        "Per-design quantity control",
+        "Automatic trim of transparent borders",
+        "Optional rotation for tighter packing",
+        "Custom roll width and gap settings",
+        "Multi-page splitting for long sheets",
+        "Print-ready PNG export at 300 DPI"
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is a DTF gang sheet?",
+          "acceptedAnswer": { "@type": "Answer", "text": "A DTF gang sheet is a single sheet of direct-to-film transfer material that holds many separate designs packed together. Ganging designs onto one sheet uses less film and lowers your cost per print compared to printing each design on its own." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is this gang sheet maker really free?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. The tool is completely free with no account, no watermark, and no limits. It runs entirely in your browser, so your designs are never uploaded to a server." }
+        },
+        {
+          "@type": "Question",
+          "name": "What size and resolution should my PNG files be?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Use transparent PNGs exported at 300 DPI at the real print size you want. The tool reads each file's pixel dimensions and lays designs out at 300 DPI so they print at true size." }
+        },
+        {
+          "@type": "Question",
+          "name": "How does the layout save me money?",
+          "acceptedAnswer": { "@type": "Answer", "text": "The packing engine arranges every design, including duplicates from your quantity settings, into the smallest possible sheet length. Less used film per sheet means lower material cost on every order." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<style>
+  :root{
+    --bg:#0c0d10; --panel:#15171c; --panel-2:#1d2027; --line:#2a2e37;
+    --text:#eef0f4; --muted:#9aa3b2; --accent:#ffd23f; --accent-2:#3fb6ff;
+    --good:#46d39a; --danger:#ff5d5d; --radius:14px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:radial-gradient(1200px 600px at 80% -10%,#1a1d24 0%,var(--bg) 55%);
+    color:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--accent-2);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 18px}
+  header.site{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 0;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px;letter-spacing:.2px}
+  .brand .bolt{color:var(--accent)}
+  .nav{display:flex;gap:18px;align-items:center;font-size:14px;flex-wrap:wrap}
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    border:1px solid var(--line);background:var(--panel-2);color:var(--text);
+    padding:10px 16px;border-radius:10px;font-weight:600;cursor:pointer;font-size:14px;transition:.15s;
+  }
+  .btn:hover{border-color:#3a3f4b;text-decoration:none}
+  .btn.primary{background:var(--accent);color:#1a1500;border-color:var(--accent)}
+  .btn.primary:hover{filter:brightness(1.06)}
+  .btn.accent{background:var(--accent-2);color:#001624;border-color:var(--accent-2)}
+  .btn:disabled{opacity:.45;cursor:not-allowed}
+
+  .hero{padding:26px 0 8px}
+  .hero h1{font-size:clamp(28px,4vw,44px);line-height:1.05;margin:0 0 10px;font-weight:850}
+  .hero h1 .hl{color:var(--accent)}
+  .hero p.sub{font-size:17px;color:var(--muted);max-width:680px;margin:0 0 14px}
+  .badges{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+  .badge{font-size:12.5px;color:var(--muted);background:var(--panel);border:1px solid var(--line);padding:6px 11px;border-radius:999px}
+  .badge b{color:var(--good)}
+
+  .app{display:grid;grid-template-columns:1.15fr .85fr;gap:18px;margin:22px 0}
+  @media (max-width:920px){.app{grid-template-columns:1fr}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px}
+  .card h2{font-size:15px;margin:0 0 12px;display:flex;align-items:center;gap:9px;letter-spacing:.2px}
+  .step{width:24px;height:24px;border-radius:7px;background:var(--accent);color:#1a1500;display:inline-flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex:none}
+
+  .drop{
+    border:2px dashed #353a45;border-radius:12px;padding:30px 16px;text-align:center;
+    color:var(--muted);cursor:pointer;transition:.15s;background:var(--panel-2)
+  }
+  .drop:hover,.drop.drag{border-color:var(--accent);color:var(--text);background:#20242c}
+  .drop strong{color:var(--text);display:block;font-size:15px;margin-bottom:3px}
+
+  .designs{margin-top:14px;display:flex;flex-direction:column;gap:8px;max-height:330px;overflow:auto}
+  .design{display:grid;grid-template-columns:46px 1fr auto;gap:11px;align-items:center;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:9px}
+  .thumb{width:46px;height:46px;border-radius:7px;background:#0d0f13 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"><rect width="6" height="6" fill="%23222"/><rect x="6" y="6" width="6" height="6" fill="%23222"/></svg>');background-size:12px;object-fit:contain;border:1px solid var(--line)}
+  .design .meta{min-width:0}
+  .design .name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .design .dims{font-size:11.5px;color:var(--muted)}
+  .design .ctrls{display:flex;align-items:center;gap:6px}
+  .qty{display:flex;align-items:center;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  .qty button{background:var(--panel);border:0;color:var(--text);width:26px;height:30px;cursor:pointer;font-size:15px}
+  .qty button:hover{background:#262b34}
+  .qty input{width:38px;height:30px;border:0;background:transparent;color:var(--text);text-align:center;font-size:13px;-moz-appearance:textfield}
+  .qty input::-webkit-outer-spin-button,.qty input::-webkit-inner-spin-button{-webkit-appearance:none}
+  .chip{font-size:11px;border:1px solid var(--line);background:var(--panel);color:var(--muted);border-radius:7px;padding:5px 7px;cursor:pointer;user-select:none}
+  .chip.on{background:var(--accent-2);color:#001624;border-color:var(--accent-2);font-weight:700}
+  .x{background:transparent;border:0;color:var(--muted);cursor:pointer;font-size:17px;line-height:1;padding:4px}
+  .x:hover{color:var(--danger)}
+
+  .field{margin-bottom:14px}
+  .field label{display:block;font-size:12.5px;color:var(--muted);margin-bottom:6px;font-weight:600}
+  .field .hint{font-size:11.5px;color:#6b7280;margin-top:5px}
+  select,input[type=text],input[type=number]{
+    width:100%;background:var(--panel-2);border:1px solid var(--line);color:var(--text);
+    border-radius:9px;padding:10px;font-size:14px;font-family:inherit
+  }
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+
+  .preview-wrap{margin-top:18px}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+  @media (max-width:560px){.stats{grid-template-columns:repeat(2,1fr)}}
+  .stat{background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:11px 12px}
+  .stat .v{font-size:19px;font-weight:800}
+  .stat .v.good{color:var(--good)}
+  .stat .k{font-size:11px;color:var(--muted);margin-top:2px}
+  .canvas-host{background:
+      url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><rect width="10" height="10" fill="%23191b20"/><rect x="10" y="10" width="10" height="10" fill="%23191b20"/><rect x="10" width="10" height="10" fill="%2312141a"/><rect y="10" width="10" height="10" fill="%2312141a"/></svg>');
+      background-size:20px;border:1px solid var(--line);border-radius:12px;padding:12px;text-align:center;min-height:160px;
+      display:flex;align-items:center;justify-content:center;color:var(--muted)}
+  .canvas-host canvas{max-width:100%;height:auto;display:block;margin:0 auto;box-shadow:0 6px 30px rgba(0,0,0,.4)}
+  .pages{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+  .pagebtn{font-size:12px;border:1px solid var(--line);background:var(--panel-2);color:var(--muted);border-radius:8px;padding:6px 11px;cursor:pointer}
+  .pagebtn.on{background:var(--accent);color:#1a1500;border-color:var(--accent);font-weight:700}
+
+  section.content{margin:46px 0 30px}
+  section.content h2{font-size:24px;margin:30px 0 12px}
+  section.content h3{font-size:17px;margin:22px 0 6px}
+  section.content p{color:#c7ccd6;max-width:760px}
+  .faq details{border:1px solid var(--line);border-radius:10px;padding:4px 14px;margin-bottom:10px;background:var(--panel)}
+  .faq summary{cursor:pointer;font-weight:600;padding:10px 0}
+  .faq p{margin:0 0 12px}
+  footer.site{border-top:1px solid var(--line);margin-top:30px;padding:22px 0 40px;color:var(--muted);font-size:13.5px}
+  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--panel-2);border:1px solid var(--line);color:var(--text);padding:11px 18px;border-radius:10px;font-size:14px;opacity:0;pointer-events:none;transition:.2s;z-index:50}
+  .toast.show{opacity:1}
+  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="site">
+    <div class="brand"><span class="bolt">⚡</span> Free Gang Sheet Maker</div>
+    <nav class="nav">
+      <a href="#how">How it works</a>
+      <a href="#faq">FAQ</a>
+      <a href="https://dtf.stream/" target="_blank" rel="noopener">Order DTF Prints</a>
+      <a class="btn" href="https://screenprintgpt.com/" target="_blank" rel="noopener">ScreenPrintGPT</a>
+    </nav>
+  </header>
+
+  <div class="hero">
+    <h1>The <span class="hl">free</span> DTF gang sheet maker that wastes the least film.</h1>
+    <p class="sub">Upload your transparent PNGs, set how many of each you need, and the layout engine packs them into a print-ready gang sheet automatically. No account, no watermark, nothing leaves your browser.</p>
+    <div class="badges">
+      <span class="badge"><b>100% free</b> &amp; no sign-up</span>
+      <span class="badge"><b>Private</b> — files never uploaded</span>
+      <span class="badge"><b>300 DPI</b> print-ready PNG</span>
+      <span class="badge">Auto rotate, trim &amp; multi-page</span>
+    </div>
+  </div>
+
+  <main class="app">
+    <!-- LEFT: upload + designs -->
+    <div class="card">
+      <h2><span class="step">1</span> Upload your designs</h2>
+      <div class="drop" id="drop" tabindex="0" role="button" aria-label="Upload transparent PNG files">
+        <strong>Drag &amp; drop transparent PNGs</strong>
+        or click to browse. We measure each file and pack the tightest layout.
+      </div>
+      <input type="file" id="file" accept="image/png" multiple class="sr">
+      <div class="designs" id="designs" aria-live="polite"></div>
+    </div>
+
+    <!-- RIGHT: settings -->
+    <div class="card">
+      <h2><span class="step">2</span> Sheet settings</h2>
+      <div class="row2">
+        <div class="field">
+          <label for="width">Roll width (inches)</label>
+          <select id="width">
+            <option value="custom-13">13"</option>
+            <option value="custom-17">17"</option>
+            <option value="custom-22" selected>22"</option>
+            <option value="custom-24">24"</option>
+          </select>
+          <div class="hint">Printable width of your film roll.</div>
+        </div>
+        <div class="field">
+          <label for="maxlen">Max page length</label>
+          <select id="maxlen">
+            <option value="12">12"</option>
+            <option value="24">2 ft</option>
+            <option value="60" selected>5 ft</option>
+            <option value="120">10 ft</option>
+            <option value="180">15 ft</option>
+            <option value="0">No limit (one page)</option>
+          </select>
+          <div class="hint">Longer layouts split into a ZIP.</div>
+        </div>
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label for="gap">Gap between designs (inches)</label>
+          <input type="number" id="gap" value="0.125" min="0" step="0.0625">
+          <div class="hint">Lower saves film; higher eases weeding.</div>
+        </div>
+        <div class="field">
+          <label for="dpi">DPI</label>
+          <input type="number" id="dpi" value="300" min="72" step="1">
+          <div class="hint">300 is standard for DTF.</div>
+        </div>
+      </div>
+      <div class="field">
+        <label><input type="checkbox" id="rotate" checked style="width:auto;margin-right:7px;vertical-align:-2px">Allow rotating designs for a tighter fit</label>
+      </div>
+      <div class="field">
+        <label for="fname">File name</label>
+        <input type="text" id="fname" value="gang-sheet">
+      </div>
+      <div class="actions">
+        <button class="btn primary" id="render">Render layout</button>
+        <button class="btn accent" id="download" disabled>Download PNG</button>
+        <button class="btn" id="clear">Clear all</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- PREVIEW -->
+  <div class="card preview-wrap">
+    <h2><span class="step">3</span> Preview &amp; download</h2>
+    <div class="stats" id="stats" style="display:none">
+      <div class="stat"><div class="v" id="s-designs">0</div><div class="k">Designs placed</div></div>
+      <div class="stat"><div class="v" id="s-size">—</div><div class="k">Sheet size</div></div>
+      <div class="stat"><div class="v good" id="s-util">—</div><div class="k">Film used</div></div>
+      <div class="stat"><div class="v" id="s-pages">1</div><div class="k">Pages</div></div>
+    </div>
+    <div class="pages" id="pages"></div>
+    <div class="canvas-host" id="host">Upload designs and press <b style="margin:0 5px">Render layout</b> to preview.</div>
+  </div>
+
+  <!-- SEO / AI-SEO CONTENT -->
+  <section class="content" id="how">
+    <h2>How to make a DTF gang sheet for free</h2>
+    <p>A gang sheet packs many separate designs onto one DTF transfer film so you use less material and pay less per print. This free gang sheet maker does the packing math for you. Upload your transparent PNG designs, set the quantity of each one, choose your roll width, and press Render Layout. The tool arranges every design into the shortest possible sheet, then exports a print-ready PNG at 300 DPI. Sheets longer than your chosen page length are split into multiple pages and bundled into a ZIP automatically.</p>
+
+    <h3>1. Export transparent PNGs at print size</h3>
+    <p>Save each design as a PNG with a transparent background at the real size you want it printed, at 300 DPI. The tool reads the pixel dimensions of each file so your prints come out at true size.</p>
+
+    <h3>2. Set quantities and trim</h3>
+    <p>Use the quantity control to print several copies of the same design, and turn on Trim to crop away empty transparent borders so designs pack tighter. Leave rotation on to let the engine turn designs when it produces a tighter fit.</p>
+
+    <h3>3. Render, check the stats, download</h3>
+    <p>The stats show how many designs were placed, the final sheet size, how much film is actually covered, and how many pages were produced. When you are happy, download the print-ready file and send it to your printer, or order finished transfers from DTF.STREAM.</p>
+
+    <h2 id="faq">Frequently asked questions</h2>
+    <div class="faq">
+      <details open><summary>Is this gang sheet maker really free?</summary><p>Yes. It is completely free with no account, no watermark, and no limits. Everything runs in your browser, so your artwork is never uploaded to a server.</p></details>
+      <details><summary>What is a DTF gang sheet?</summary><p>A DTF gang sheet is one sheet of direct-to-film transfer material holding many designs packed together. Ganging designs onto a single sheet uses less film and lowers your cost per print.</p></details>
+      <details><summary>What file type and resolution should I use?</summary><p>Transparent PNG files exported at 300 DPI at the real print size. The tool lays everything out at 300 DPI by default so designs print at true size.</p></details>
+      <details><summary>How does it save me money?</summary><p>The packing engine arranges every design, including duplicates, into the smallest sheet length possible. Less used film per sheet means a lower material cost on every order.</p></details>
+      <details><summary>Are my designs private?</summary><p>Yes. The tool never sends your files anywhere. All measuring, packing, and rendering happens locally in your browser.</p></details>
+    </div>
+  </section>
+
+  <footer class="site">
+    <div>Made by <a href="https://dtf.stream/" target="_blank" rel="noopener">DTF.STREAM</a> and <a href="https://screenprintgpt.com/" target="_blank" rel="noopener">ScreenPrintGPT</a>. Free DTF gang sheet maker — runs entirely in your browser.</div>
+  </footer>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+(function(){
+  // ---------- state ----------
+  const designs = []; // {id,name,img,w,h,trim:{x,y,w,h}|null,trimmed:bool,qty}
+  let pages = [];      // rendered canvases
+  let currentPage = 0;
+  let uid = 1;
+
+  const $ = id => document.getElementById(id);
+  const drop = $('drop'), fileInput = $('file'), list = $('designs');
+
+  function toast(msg){
+    const t=$('toast'); t.textContent=msg; t.classList.add('show');
+    clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('show'),2200);
+  }
+
+  // ---------- file intake ----------
+  drop.addEventListener('click',()=>fileInput.click());
+  drop.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();fileInput.click();}});
+  ['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('drag');}));
+  ['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('drag');}));
+  drop.addEventListener('drop',e=>handleFiles(e.dataTransfer.files));
+  fileInput.addEventListener('change',e=>handleFiles(e.target.files));
+
+  function handleFiles(files){
+    let added=0;
+    [...files].forEach(f=>{
+      if(f.type!=='image/png'){return;}
+      const url=URL.createObjectURL(f);
+      const img=new Image();
+      img.onload=()=>{
+        designs.push({id:uid++,name:f.name.replace(/\.png$/i,''),img,w:img.naturalWidth,h:img.naturalHeight,trim:null,trimmed:false,qty:1});
+        renderList();
+      };
+      img.src=url; added++;
+    });
+    if(added===0) toast('Please drop transparent PNG files.');
+  }
+
+  // ---------- trim (compute transparent bounding box) ----------
+  function computeTrim(d){
+    const c=document.createElement('canvas');
+    c.width=d.w; c.height=d.h;
+    const ctx=c.getContext('2d');
+    ctx.drawImage(d.img,0,0);
+    let data;
+    try{ data=ctx.getImageData(0,0,d.w,d.h).data; }catch(e){ return null; }
+    let minX=d.w,minY=d.h,maxX=0,maxY=0,found=false;
+    for(let y=0;y<d.h;y++){
+      for(let x=0;x<d.w;x++){
+        if(data[(y*d.w+x)*4+3]>8){
+          found=true;
+          if(x<minX)minX=x; if(x>maxX)maxX=x;
+          if(y<minY)minY=y; if(y>maxY)maxY=y;
+        }
+      }
+    }
+    if(!found) return {x:0,y:0,w:d.w,h:d.h};
+    return {x:minX,y:minY,w:maxX-minX+1,h:maxY-minY+1};
+  }
+
+  // ---------- design list UI ----------
+  function renderList(){
+    list.innerHTML='';
+    designs.forEach(d=>{
+      const dim = d.trimmed && d.trim ? d.trim : {w:d.w,h:d.h};
+      const el=document.createElement('div'); el.className='design';
+      el.innerHTML=`
+        <img class="thumb" src="${d.img.src}" alt="">
+        <div class="meta">
+          <div class="name" title="${d.name}">${d.name}</div>
+          <div class="dims">${dim.w}×${dim.h}px</div>
+        </div>
+        <div class="ctrls">
+          <span class="chip ${d.trimmed?'on':''}" data-act="trim">Trim</span>
+          <div class="qty">
+            <button data-act="minus">−</button>
+            <input type="number" min="1" value="${d.qty}" data-act="qty">
+            <button data-act="plus">+</button>
+          </div>
+          <button class="x" data-act="del" aria-label="Remove">×</button>
+        </div>`;
+      el.querySelector('[data-act=trim]').onclick=()=>{
+        if(!d.trimmed){ if(!d.trim) d.trim=computeTrim(d); d.trimmed=true; } else { d.trimmed=false; }
+        renderList();
+      };
+      el.querySelector('[data-act=minus]').onclick=()=>{d.qty=Math.max(1,d.qty-1);renderList();};
+      el.querySelector('[data-act=plus]').onclick=()=>{d.qty++;renderList();};
+      el.querySelector('[data-act=qty]').onchange=e=>{d.qty=Math.max(1,parseInt(e.target.value)||1);renderList();};
+      el.querySelector('[data-act=del]').onclick=()=>{const i=designs.indexOf(d);designs.splice(i,1);renderList();};
+      list.appendChild(el);
+    });
+  }
+
+  // ---------- MaxRects bin packer (Best Short Side Fit, with rotation) ----------
+  function packBin(items, binW, binH, allowRotate){
+    // items: [{id,w,h,...}] in px (already includes gap padding)
+    const free=[{x:0,y:0,w:binW,h:binH}];
+    const placed=[];
+    function findNode(w,h){
+      let best=null,bestShort=Infinity,bestLong=Infinity;
+      for(const f of free){
+        if(w<=f.w&&h<=f.h){
+          const leftH=f.w-w, leftV=f.h-h;
+          const sh=Math.min(leftH,leftV), lo=Math.max(leftH,leftV);
+          if(sh<bestShort||(sh===bestShort&&lo<bestLong)){
+            best={x:f.x,y:f.y,w,h,rot:false};bestShort=sh;bestLong=lo;
+          }
+        }
+        if(allowRotate && h<=f.w && w<=f.h){
+          const leftH=f.w-h, leftV=f.h-w;
+          const sh=Math.min(leftH,leftV), lo=Math.max(leftH,leftV);
+          if(sh<bestShort||(sh===bestShort&&lo<bestLong)){
+            best={x:f.x,y:f.y,w:h,h:w,rot:true};bestShort=sh;bestLong=lo;
+          }
+        }
+      }
+      return best;
+    }
+    function splitFree(node){
+      const next=[];
+      for(const f of free){
+        if(node.x>=f.x+f.w||node.x+node.w<=f.x||node.y>=f.y+f.h||node.y+node.h<=f.y){
+          next.push(f);continue;
+        }
+        if(node.x>f.x) next.push({x:f.x,y:f.y,w:node.x-f.x,h:f.h});
+        if(node.x+node.w<f.x+f.w) next.push({x:node.x+node.w,y:f.y,w:f.x+f.w-(node.x+node.w),h:f.h});
+        if(node.y>f.y) next.push({x:f.x,y:f.y,w:f.w,h:node.y-f.y});
+        if(node.y+node.h<f.y+f.h) next.push({x:f.x,y:node.y+node.h,w:f.w,h:f.y+f.h-(node.y+node.h)});
+      }
+      // prune contained rects
+      free.length=0;
+      for(let i=0;i<next.length;i++){
+        let contained=false;
+        for(let j=0;j<next.length;j++){
+          if(i!==j){
+            const a=next[i],b=next[j];
+            if(a.x>=b.x&&a.y>=b.y&&a.x+a.w<=b.x+b.w&&a.y+a.h<=b.y+b.h){contained=true;break;}
+          }
+        }
+        if(!contained && next[i].w>0 && next[i].h>0) free.push(next[i]);
+      }
+    }
+    // sort big-first by max side then area
+    const order=[...items].sort((a,b)=>Math.max(b.w,b.h)-Math.max(a.w,a.h)||b.w*b.h-a.w*a.h);
+    for(const it of order){
+      const node=findNode(it.w,it.h);
+      if(!node) return null; // does not fit
+      placed.push({item:it,x:node.x,y:node.y,w:node.w,h:node.h,rot:node.rot});
+      splitFree(node);
+    }
+    return placed;
+  }
+
+  // ---------- expand quantities into placement items ----------
+  function buildItems(gapPx){
+    const items=[];
+    designs.forEach(d=>{
+      const src = d.trimmed&&d.trim ? d.trim : {x:0,y:0,w:d.w,h:d.h};
+      for(let q=0;q<d.qty;q++){
+        items.push({d, sx:src.x, sy:src.y, sw:src.w, sh:src.h, w:src.w+gapPx, h:src.h+gapPx});
+      }
+    });
+    return items;
+  }
+
+  // ---------- render ----------
+  $('render').onclick=()=>{
+    if(designs.length===0){toast('Add at least one PNG first.');return;}
+    const dpi=Math.max(72,parseInt($('dpi').value)||300);
+    const widthIn=parseFloat($('width').value.replace('custom-',''))||22;
+    const gapIn=Math.max(0,parseFloat($('gap').value)||0);
+    const maxLenIn=parseFloat($('maxlen').value);
+    const allowRotate=$('rotate').checked;
+    const binW=Math.round(widthIn*dpi);
+    const gapPx=Math.round(gapIn*dpi);
+    const maxLenPx = maxLenIn>0 ? Math.round(maxLenIn*dpi) : 1e9;
+
+    // check oversize items
+    const items=buildItems(gapPx);
+    for(const it of items){
+      const fitsNormal = it.w<=binW;
+      const fitsRot = allowRotate && it.h<=binW;
+      if(!fitsNormal && !fitsRot){
+        toast(`"${it.d.name}" is wider than the roll. Increase roll width or trim it.`);
+        return;
+      }
+    }
+
+    // Greedy multi-page: try to pack all into one tall bin, then split by maxLen.
+    // We pack into a very tall bin to get y-positions, then cut into pages.
+    const tallBin = Math.max(...items.map(i=>Math.max(i.w,i.h)))* items.length + binW; // generous height
+    let placed = packBin(items, binW, tallBin, allowRotate);
+    if(!placed){toast('Could not place all designs. Try a larger roll width.');return;}
+
+    // total used height
+    let usedH=0; placed.forEach(p=>usedH=Math.max(usedH,p.y+p.h));
+
+    // assign to pages by y band
+    pages=[];
+    const pageCount = Math.max(1, Math.ceil(usedH/maxLenPx));
+    let coveredArea=0;
+    for(let pg=0; pg<pageCount; pg++){
+      const y0=pg*maxLenPx;
+      const inPage=placed.filter(p=>p.y>=y0 && p.y<y0+maxLenPx);
+      if(inPage.length===0) continue;
+      let pageH=0; inPage.forEach(p=>pageH=Math.max(pageH,p.y-y0+p.h));
+      const c=document.createElement('canvas');
+      c.width=binW; c.height=Math.max(1,pageH);
+      const ctx=c.getContext('2d');
+      inPage.forEach(p=>{
+        const it=p.item;
+        coveredArea += it.sw*it.sh;
+        ctx.save();
+        const drawX=p.x, drawY=p.y-y0;
+        if(p.rot){
+          ctx.translate(drawX+p.w/2, drawY+p.h/2);
+          ctx.rotate(Math.PI/2);
+          ctx.drawImage(it.d.img, it.sx,it.sy,it.sw,it.sh, -it.sw/2, -it.sh/2, it.sw, it.sh);
+        }else{
+          ctx.drawImage(it.d.img, it.sx,it.sy,it.sw,it.sh, drawX, drawY, it.sw, it.sh);
+        }
+        ctx.restore();
+      });
+      pages.push(c);
+    }
+
+    // stats
+    const totalSheetArea = pages.reduce((s,c)=>s+c.width*c.height,0);
+    const util = totalSheetArea>0 ? Math.round(coveredArea/totalSheetArea*100) : 0;
+    $('stats').style.display='grid';
+    $('s-designs').textContent=items.length;
+    const totLenIn = (pages.reduce((s,c)=>s+c.height,0)/dpi).toFixed(1);
+    $('s-size').textContent=`${widthIn}" × ${totLenIn}"`;
+    $('s-util').textContent=util+'%';
+    $('s-pages').textContent=pages.length;
+
+    currentPage=0;
+    renderPages();
+    $('download').disabled=false;
+    toast(`Packed ${items.length} designs onto ${pages.length} page${pages.length>1?'s':''}.`);
+  };
+
+  function renderPages(){
+    const host=$('host'), tabs=$('pages');
+    tabs.innerHTML='';
+    if(pages.length>1){
+      pages.forEach((c,i)=>{
+        const b=document.createElement('button');
+        b.className='pagebtn'+(i===currentPage?' on':'');
+        b.textContent='Page '+(i+1);
+        b.onclick=()=>{currentPage=i;renderPages();};
+        tabs.appendChild(b);
+      });
+    }
+    host.innerHTML='';
+    host.appendChild(pages[currentPage]);
+  }
+
+  // ---------- download ----------
+  $('download').onclick=async ()=>{
+    if(pages.length===0) return;
+    const base=($('fname').value||'gang-sheet').replace(/[^\w\-]+/g,'-');
+    if(pages.length===1){
+      const a=document.createElement('a');
+      a.href=pages[0].toDataURL('image/png');
+      a.download=base+'.png'; a.click();
+      return;
+    }
+    const zip=new JSZip();
+    for(let i=0;i<pages.length;i++){
+      const blob=await new Promise(r=>pages[i].toBlob(r,'image/png'));
+      zip.file(`${base}-page-${i+1}.png`,blob);
+    }
+    const out=await zip.generateAsync({type:'blob'});
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(out);
+    a.download=base+'.zip'; a.click();
+  };
+
+  // ---------- clear ----------
+  $('clear').onclick=()=>{
+    designs.length=0; pages=[]; renderList();
+    $('host').innerHTML='Upload designs and press <b style="margin:0 5px">Render layout</b> to preview.';
+    $('pages').innerHTML=''; $('stats').style.display='none';
+    $('download').disabled=true;
+  };
+})();
+</script>
+</body>
+</html>
