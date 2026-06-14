@@ -22,3 +22,6 @@ Screen printers, DTF print shops, and small apparel businesses who want to gang 
 
 ## Pages
 - [Free Gang Sheet Maker](https://freegangsheetmaker.com/): the tool plus a how-to guide, DTF gang sheet sizing and DPI guidance, a glossary, and an FAQ.
+- [Gang Sheet Builder](https://freegangsheetmaker.com/gang-sheet-builder/): what an online gang sheet builder is, how this free one works, and why to use it over a print shop's.
+- [How to Build a Gang Sheet](https://freegangsheetmaker.com/how-to-build-a-gang-sheet/): step-by-step guide from exporting PNGs at 300 DPI to downloading a print-ready sheet.
+- [DTF Gang Sheet Sizes](https://freegangsheetmaker.com/dtf-gang-sheet-sizes/): standard roll widths (13", 17", 22", 24"), lengths, the 300 DPI rule, and design spacing.

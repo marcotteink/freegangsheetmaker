@@ -299,6 +299,12 @@
   table.specs th{background:var(--panel-2);color:var(--text);font-weight:700}
   table.specs td{color:#c7ccd6}
   table.specs tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+  .guides{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;max-width:760px;margin:14px 0}
+  @media(max-width:640px){.guides{grid-template-columns:1fr}}
+  .guides a{display:block;border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:14px 16px;color:var(--text)}
+  .guides a:hover{border-color:var(--accent);text-decoration:none}
+  .guides a b{display:block;font-size:14.5px}
+  .guides a span{display:block;color:var(--muted);font-size:12.5px;margin-top:4px}
   footer.site{border-top:1px solid var(--line);margin-top:30px;padding:22px 0 40px;color:var(--muted);font-size:13.5px}
   .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--panel-2);border:1px solid var(--line);color:var(--text);padding:11px 18px;border-radius:10px;font-size:14px;opacity:0;pointer-events:none;transition:.2s;z-index:50}
   .toast.show{opacity:1}
@@ -509,6 +515,14 @@
       <li><strong>Weeding:</strong> removing the excess film around each printed design before pressing.</li>
       <li><strong>DPI (dots per inch):</strong> print resolution; 300 DPI is the DTF standard for sharp results.</li>
     </ul>
+
+    <h2>Gang sheet guides</h2>
+    <p>New to DTF gang sheets, or want to go deeper? These guides cover everything:</p>
+    <div class="guides">
+      <a href="/gang-sheet-builder/"><b>Free gang sheet builder</b><span>How the online builder works and why to use it.</span></a>
+      <a href="/how-to-build-a-gang-sheet/"><b>How to build a gang sheet</b><span>Step-by-step from artwork to print-ready file.</span></a>
+      <a href="/dtf-gang-sheet-sizes/"><b>DTF gang sheet sizes</b><span>Roll widths, dimensions, and the 300 DPI rule.</span></a>
+    </div>
 
     <h2 id="faq">Frequently asked questions</h2>
     <div class="faq">
