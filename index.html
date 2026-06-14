@@ -3,6 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Google Analytics 4 (gtag.js). Loads only once a real Measurement ID is set below. -->
+<script>
+(function(){
+  var GA_ID="G-ZG8477726M"; /* GA4 Measurement ID — same property as the prior freegangsheetmaker.com deployment, so data is continuous */
+  window.GA_ID=GA_ID;
+  if(GA_ID==="G-XXXXXXXXXX" || !/^G-[A-Z0-9]{6,}$/.test(GA_ID)) return; /* stays inert until a real ID is set */
+  var s=document.createElement('script');
+  s.async=true; s.src="https://www.googletagmanager.com/gtag/js?id="+GA_ID;
+  document.head.appendChild(s);
+  window.dataLayer=window.dataLayer||[];
+  window.gtag=function(){dataLayer.push(arguments);};
+  gtag('js', new Date());
+  gtag('config', GA_ID);
+})();
+</script>
+
 <title>Free Gang Sheet Maker | DTF Gang Sheet Builder &amp; Layout Optimizer</title>
 <meta name="description" content="Free online DTF gang sheet maker. Upload transparent PNGs, set quantities, and auto-pack them into a print-ready gang sheet with the least wasted film. No account, no fees, runs in your browser.">
 <meta name="keywords" content="free gang sheet maker, DTF gang sheet builder, gang sheet maker, DTF layout optimizer, build a gang sheet, gang sheet generator, screen printing gang sheet, DTF transfer sheet maker">
@@ -218,7 +235,7 @@
 
   <div class="hero">
     <h1>The <span class="hl">free</span> DTF gang sheet maker that wastes the least film.</h1>
-    <p class="sub">Upload your transparent PNGs, set how many of each you need, and the layout engine packs them into a print-ready gang sheet automatically. No account, no watermark, nothing leaves your browser.</p>
+    <p class="sub">Upload your transparent PNGs, set how many of each you need, and the layout engine packs them into a print-ready gang sheet automatically. No account, no watermark — your artwork never leaves your browser.</p>
     <div class="badges">
       <span class="badge"><b>100% free</b> &amp; no sign-up</span>
       <span class="badge"><b>Private</b> — files never uploaded</span>
@@ -326,7 +343,7 @@
       <details><summary>What is a DTF gang sheet?</summary><p>A DTF gang sheet is one sheet of direct-to-film transfer material holding many designs packed together. Ganging designs onto a single sheet uses less film and lowers your cost per print.</p></details>
       <details><summary>What file type and resolution should I use?</summary><p>Transparent PNG files exported at 300 DPI at the real print size. The tool lays everything out at 300 DPI by default so designs print at true size.</p></details>
       <details><summary>How does it save me money?</summary><p>The packing engine arranges every design, including duplicates, into the smallest sheet length possible. Less used film per sheet means a lower material cost on every order.</p></details>
-      <details><summary>Are my designs private?</summary><p>Yes. The tool never sends your files anywhere. All measuring, packing, and rendering happens locally in your browser.</p></details>
+      <details><summary>Are my designs private?</summary><p>Yes. Your artwork is never uploaded — all measuring, packing, and rendering happens locally in your browser. We use privacy-friendly, aggregate analytics (page views and anonymous feature usage like uploads and renders) to improve the tool, but your images and file names are never collected.</p></details>
     </div>
   </section>
 
@@ -374,6 +391,10 @@
     const t=$('toast'); t.textContent=msg; t.classList.add('show');
     clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('show'),2200);
   }
+
+  // ---------- analytics ----------
+  // Sends anonymous usage/utilization events to GA4. NEVER sends artwork, image data, or file names.
+  function track(name, params){ try{ if(window.gtag) window.gtag('event', name, params||{}); }catch(e){} }
 
   // ---------- sizing / DPI helpers ----------
   // active pixel box for a design (trimmed box if trim is on, else the full image)
@@ -430,6 +451,7 @@
       img.src=url; added++;
     });
     if(added===0) toast('Please drop transparent PNG files.');
+    else track('upload_designs',{count:added});
   }
 
   // ---------- trim (compute transparent bounding box) ----------
@@ -488,13 +510,18 @@
       el.querySelector('[data-act=zoom]').onclick=()=>openLightbox(d);
       el.querySelector('[data-act=trim]').onclick=()=>{
         if(!d.trimmed){ if(!d.trim) d.trim=computeTrim(d); d.trimmed=true; } else { d.trimmed=false; }
+        track('toggle_trim',{enabled:d.trimmed});
         renderList();
       };
       el.querySelector('[data-act=w]').onchange=e=>{
-        const v=parseFloat(e.target.value); if(v>0){ d.dpi=activeSrc(d).w/v; } renderList();
+        const v=parseFloat(e.target.value); if(v>0){ d.dpi=activeSrc(d).w/v; }
+        track('resize_design',{dpi:Math.round(d.dpi),quality:dpiQuality(Math.round(d.dpi)).label});
+        renderList();
       };
       el.querySelector('[data-act=h]').onchange=e=>{
-        const v=parseFloat(e.target.value); if(v>0){ d.dpi=activeSrc(d).h/v; } renderList();
+        const v=parseFloat(e.target.value); if(v>0){ d.dpi=activeSrc(d).h/v; }
+        track('resize_design',{dpi:Math.round(d.dpi),quality:dpiQuality(Math.round(d.dpi)).label});
+        renderList();
       };
       el.querySelector('[data-act=minus]').onclick=()=>{d.qty=Math.max(1,d.qty-1);renderList();};
       el.querySelector('[data-act=plus]').onclick=()=>{d.qty++;renderList();};
@@ -652,6 +679,18 @@
     $('s-util').textContent=util+'%';
     $('s-pages').textContent=pages.length;
 
+    track('render_layout',{
+      designs_placed: items.length,
+      unique_designs: designs.length,
+      roll_width_in: widthIn,
+      sheet_length_in: parseFloat(totLenIn),
+      utilization_pct: util,
+      pages: pages.length,
+      rotate_enabled: allowRotate,
+      dpi: dpi,
+      low_dpi_designs: designs.filter(d=>Math.round(d.dpi)<280).length
+    });
+
     currentPage=0;
     renderPages();
     $('download').disabled=false;
@@ -685,6 +724,7 @@
       a.href=URL.createObjectURL(blob);
       a.download=base+'.png'; a.click();
       setTimeout(()=>URL.revokeObjectURL(a.href),1500);
+      track('download',{type:'png',pages:1,dpi:dpi});
       return;
     }
     const zip=new JSZip();
@@ -697,6 +737,7 @@
     a.href=URL.createObjectURL(out);
     a.download=base+'.zip'; a.click();
     setTimeout(()=>URL.revokeObjectURL(a.href),1500);
+    track('download',{type:'zip',pages:pages.length,dpi:dpi});
   };
 
   // ---------- clear ----------
@@ -724,6 +765,7 @@
     lbImg.src=d.img.src; lbTitle.textContent=d.name;
     setStageBg('transparent', document.querySelector('.lb-bg .sw-tr'));
     lightbox.classList.add('show'); lightbox.setAttribute('aria-hidden','false');
+    track('expand_thumbnail',{});
   }
   function closeLightbox(){ lightbox.classList.remove('show'); lightbox.setAttribute('aria-hidden','true'); }
   $('lb-close').onclick=closeLightbox;
