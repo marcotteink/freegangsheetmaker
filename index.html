@@ -121,13 +121,22 @@
   .drop:hover,.drop.drag{border-color:var(--accent);color:var(--text);background:#20242c}
   .drop strong{color:var(--text);display:block;font-size:15px;margin-bottom:3px}
 
-  .designs{margin-top:14px;display:flex;flex-direction:column;gap:8px;max-height:330px;overflow:auto}
-  .design{display:grid;grid-template-columns:46px 1fr auto;gap:11px;align-items:center;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:9px}
-  .thumb{width:46px;height:46px;border-radius:7px;background:#0d0f13 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"><rect width="6" height="6" fill="%23222"/><rect x="6" y="6" width="6" height="6" fill="%23222"/></svg>');background-size:12px;object-fit:contain;border:1px solid var(--line)}
-  .design .meta{min-width:0}
-  .design .name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .design .dims{font-size:11.5px;color:var(--muted)}
-  .design .ctrls{display:flex;align-items:center;gap:6px}
+  .designs{margin-top:14px;display:flex;flex-direction:column;gap:8px;max-height:380px;overflow:auto}
+  .design{display:grid;grid-template-columns:54px 1fr;gap:11px;align-items:start;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:9px}
+  .thumb{width:54px;height:54px;border-radius:7px;background:#0d0f13 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"><rect width="6" height="6" fill="%23222"/><rect x="6" y="6" width="6" height="6" fill="%23222"/></svg>');background-size:12px;object-fit:contain;border:1px solid var(--line);cursor:zoom-in;transition:.15s}
+  .thumb:hover{border-color:var(--accent)}
+  .design .body{min-width:0;display:flex;flex-direction:column;gap:7px}
+  .design .top{display:flex;align-items:center;gap:8px}
+  .design .name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
+  .design .dims{font-size:11.5px;color:var(--muted);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .dpibadge{font-size:10.5px;font-weight:700;border-radius:6px;padding:2px 7px;border:1px solid var(--line);white-space:nowrap}
+  .dpibadge.ideal{background:rgba(70,211,154,.15);color:var(--good);border-color:rgba(70,211,154,.4)}
+  .dpibadge.good{background:rgba(255,210,63,.15);color:var(--accent);border-color:rgba(255,210,63,.4)}
+  .dpibadge.low{background:rgba(255,93,93,.15);color:var(--danger);border-color:rgba(255,93,93,.4)}
+  .design .ctrls{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+  .size{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--muted)}
+  .size input{width:50px;height:28px;border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:7px;text-align:center;font-size:12px;padding:0 4px;-moz-appearance:textfield}
+  .size input::-webkit-outer-spin-button,.size input::-webkit-inner-spin-button{-webkit-appearance:none}
   .qty{display:flex;align-items:center;border:1px solid var(--line);border-radius:8px;overflow:hidden}
   .qty button{background:var(--panel);border:0;color:var(--text);width:26px;height:30px;cursor:pointer;font-size:15px}
   .qty button:hover{background:#262b34}
@@ -175,6 +184,23 @@
   .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--panel-2);border:1px solid var(--line);color:var(--text);padding:11px 18px;border-radius:10px;font-size:14px;opacity:0;pointer-events:none;transition:.2s;z-index:50}
   .toast.show{opacity:1}
   .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+
+  /* lightbox / image viewer */
+  .lightbox{position:fixed;inset:0;background:rgba(4,5,7,.82);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;z-index:80;padding:24px}
+  .lightbox.show{display:flex}
+  .lb-inner{background:var(--panel);border:1px solid var(--line);border-radius:14px;max-width:94vw;max-height:92vh;display:flex;flex-direction:column;overflow:hidden}
+  .lb-bar{display:flex;align-items:center;gap:14px;padding:11px 14px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+  .lb-title{font-size:13px;font-weight:600;flex:1;min-width:120px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .lb-bg{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted)}
+  .sw{width:24px;height:24px;border-radius:6px;border:1px solid var(--line);cursor:pointer;padding:0}
+  .sw.on{outline:2px solid var(--accent);outline-offset:1px}
+  .sw-tr{background:#0d0f13 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"><rect width="6" height="6" fill="%23333"/><rect x="6" y="6" width="6" height="6" fill="%23333"/></svg>');background-size:8px}
+  .lb-bg input[type=color]{width:28px;height:28px;padding:0;border:1px solid var(--line);border-radius:6px;background:none;cursor:pointer}
+  .lb-close{background:transparent;border:0;color:var(--muted);font-size:24px;line-height:1;cursor:pointer;padding:0 4px}
+  .lb-close:hover{color:var(--text)}
+  .lb-stage{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:18px;overflow:auto}
+  .lb-stage img{max-width:100%;max-height:72vh;object-fit:contain;display:block}
+  .lb-sub{font-size:11.5px;color:var(--muted);padding:0 14px 11px}
 </style>
 </head>
 <body>
@@ -309,16 +335,37 @@
   </footer>
 </div>
 
+<div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-label="Design preview">
+  <div class="lb-inner">
+    <div class="lb-bar">
+      <span class="lb-title" id="lb-title"></span>
+      <div class="lb-bg">
+        <span>Background:</span>
+        <button class="sw sw-tr on" data-bg="transparent" title="Transparent" aria-label="Transparent"></button>
+        <button class="sw" data-bg="#ffffff" style="background:#fff" title="White" aria-label="White"></button>
+        <button class="sw" data-bg="#cccccc" style="background:#ccc" title="Light gray" aria-label="Light gray"></button>
+        <button class="sw" data-bg="#808080" style="background:#808080" title="Gray" aria-label="Gray"></button>
+        <button class="sw" data-bg="#000000" style="background:#000" title="Black" aria-label="Black"></button>
+        <input type="color" id="lb-color" value="#3fb6ff" title="Custom background color">
+      </div>
+      <button class="lb-close" id="lb-close" aria-label="Close preview">×</button>
+    </div>
+    <div class="lb-stage" id="lb-stage"><img id="lb-img" alt=""></div>
+    <div class="lb-sub">Preview background only — your file stays transparent and the rendered sheet is unaffected.</div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
 "use strict";
 (function(){
   // ---------- state ----------
-  const designs = []; // {id,name,img,w,h,trim:{x,y,w,h}|null,trimmed:bool,qty}
+  const designs = []; // {id,name,img,w,h,trim:{x,y,w,h}|null,trimmed:bool,qty,dpi}
   let pages = [];      // rendered canvases
   let currentPage = 0;
   let uid = 1;
+  let renderDpi = 300; // DPI the current sheet was rendered at (used for export metadata)
 
   const $ = id => document.getElementById(id);
   const drop = $('drop'), fileInput = $('file'), list = $('designs');
@@ -326,6 +373,40 @@
   function toast(msg){
     const t=$('toast'); t.textContent=msg; t.classList.add('show');
     clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('show'),2200);
+  }
+
+  // ---------- sizing / DPI helpers ----------
+  // active pixel box for a design (trimmed box if trim is on, else the full image)
+  function activeSrc(d){ return d.trimmed && d.trim ? d.trim : {x:0,y:0,w:d.w,h:d.h}; }
+  // quality label for an effective DPI: <280 not recommended, 280-299 good, >=300 ideal
+  function dpiQuality(dpi){
+    if(dpi>=300) return {label:'Ideal',cls:'ideal'};
+    if(dpi>=280) return {label:'Good',cls:'good'};
+    return {label:'Not recommended',cls:'low'};
+  }
+
+  // ---------- PNG DPI metadata (pHYs chunk) so downloads declare their true DPI ----------
+  const CRC_TABLE=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++){c=(c&1)?(0xEDB88320^(c>>>1)):(c>>>1);}t[n]=c>>>0;}return t;})();
+  function crc32(bytes){let c=0xFFFFFFFF;for(let i=0;i<bytes.length;i++){c=CRC_TABLE[(c^bytes[i])&0xFF]^(c>>>8);}return (c^0xFFFFFFFF)>>>0;}
+  function injectPhys(png, dpi){
+    const ppm=Math.round(dpi/0.0254); // pixels per metre
+    const chunk=new Uint8Array(21);   // 4 len + 4 type + 9 data + 4 crc
+    const dv=new DataView(chunk.buffer);
+    dv.setUint32(0,9);                 // data length
+    chunk[4]=0x70;chunk[5]=0x48;chunk[6]=0x59;chunk[7]=0x73; // "pHYs"
+    dv.setUint32(8,ppm);  dv.setUint32(12,ppm); chunk[16]=1; // x ppm, y ppm, unit = metre
+    dv.setUint32(17,crc32(chunk.subarray(4,17)));            // crc over type+data
+    const insertAt=33;    // after 8-byte signature + 25-byte IHDR chunk
+    const out=new Uint8Array(png.length+21);
+    out.set(png.subarray(0,insertAt),0);
+    out.set(chunk,insertAt);
+    out.set(png.subarray(insertAt),insertAt+21);
+    return out;
+  }
+  async function canvasToPng(canvas, dpi){
+    const blob=await new Promise(r=>canvas.toBlob(r,'image/png'));
+    const buf=new Uint8Array(await blob.arrayBuffer());
+    return new Blob([injectPhys(buf,dpi)],{type:'image/png'});
   }
 
   // ---------- file intake ----------
@@ -343,7 +424,7 @@
       const url=URL.createObjectURL(f);
       const img=new Image();
       img.onload=()=>{
-        designs.push({id:uid++,name:f.name.replace(/\.png$/i,''),img,w:img.naturalWidth,h:img.naturalHeight,trim:null,trimmed:false,qty:1});
+        designs.push({id:uid++,name:f.name.replace(/\.png$/i,''),img,w:img.naturalWidth,h:img.naturalHeight,trim:null,trimmed:false,qty:1,dpi:300});
         renderList();
       };
       img.src=url; added++;
@@ -377,26 +458,43 @@
   function renderList(){
     list.innerHTML='';
     designs.forEach(d=>{
-      const dim = d.trimmed && d.trim ? d.trim : {w:d.w,h:d.h};
+      const src=activeSrc(d);
+      const dpiR=Math.round(d.dpi);
+      const wIn=(src.w/d.dpi), hIn=(src.h/d.dpi);
+      const q=dpiQuality(dpiR);
       const el=document.createElement('div'); el.className='design';
       el.innerHTML=`
-        <img class="thumb" src="${d.img.src}" alt="">
-        <div class="meta">
-          <div class="name" title="${d.name}">${d.name}</div>
-          <div class="dims">${dim.w}×${dim.h}px</div>
-        </div>
-        <div class="ctrls">
-          <span class="chip ${d.trimmed?'on':''}" data-act="trim">Trim</span>
-          <div class="qty">
-            <button data-act="minus">−</button>
-            <input type="number" min="1" value="${d.qty}" data-act="qty">
-            <button data-act="plus">+</button>
+        <img class="thumb" src="${d.img.src}" alt="" data-act="zoom" title="Click to expand">
+        <div class="body">
+          <div class="top">
+            <div class="name" title="${d.name}">${d.name}</div>
+            <button class="x" data-act="del" aria-label="Remove">×</button>
           </div>
-          <button class="x" data-act="del" aria-label="Remove">×</button>
+          <div class="dims">
+            <span>${wIn.toFixed(2)}" × ${hIn.toFixed(2)}"</span>
+            <span class="dpibadge ${q.cls}">${dpiR} DPI · ${q.label}</span>
+          </div>
+          <div class="ctrls">
+            <span class="chip ${d.trimmed?'on':''}" data-act="trim">Trim</span>
+            <span class="size">W<input data-act="w" type="number" min="0.1" step="0.1" value="${wIn.toFixed(2)}">in</span>
+            <span class="size">H<input data-act="h" type="number" min="0.1" step="0.1" value="${hIn.toFixed(2)}">in</span>
+            <div class="qty">
+              <button data-act="minus">−</button>
+              <input type="number" min="1" value="${d.qty}" data-act="qty">
+              <button data-act="plus">+</button>
+            </div>
+          </div>
         </div>`;
+      el.querySelector('[data-act=zoom]').onclick=()=>openLightbox(d);
       el.querySelector('[data-act=trim]').onclick=()=>{
         if(!d.trimmed){ if(!d.trim) d.trim=computeTrim(d); d.trimmed=true; } else { d.trimmed=false; }
         renderList();
+      };
+      el.querySelector('[data-act=w]').onchange=e=>{
+        const v=parseFloat(e.target.value); if(v>0){ d.dpi=activeSrc(d).w/v; } renderList();
+      };
+      el.querySelector('[data-act=h]').onchange=e=>{
+        const v=parseFloat(e.target.value); if(v>0){ d.dpi=activeSrc(d).h/v; } renderList();
       };
       el.querySelector('[data-act=minus]').onclick=()=>{d.qty=Math.max(1,d.qty-1);renderList();};
       el.querySelector('[data-act=plus]').onclick=()=>{d.qty++;renderList();};
@@ -467,12 +565,16 @@
   }
 
   // ---------- expand quantities into placement items ----------
-  function buildItems(gapPx){
+  // dw/dh = pixels the design occupies on the sheet at its chosen physical size and the sheet DPI.
+  function buildItems(gapPx, sheetDpi){
     const items=[];
     designs.forEach(d=>{
-      const src = d.trimmed&&d.trim ? d.trim : {x:0,y:0,w:d.w,h:d.h};
+      const src = activeSrc(d);
+      const wIn = src.w/d.dpi, hIn = src.h/d.dpi;
+      const dw = Math.max(1,Math.round(wIn*sheetDpi));
+      const dh = Math.max(1,Math.round(hIn*sheetDpi));
       for(let q=0;q<d.qty;q++){
-        items.push({d, sx:src.x, sy:src.y, sw:src.w, sh:src.h, w:src.w+gapPx, h:src.h+gapPx});
+        items.push({d, sx:src.x, sy:src.y, sw:src.w, sh:src.h, dw, dh, w:dw+gapPx, h:dh+gapPx});
       }
     });
     return items;
@@ -482,6 +584,7 @@
   $('render').onclick=()=>{
     if(designs.length===0){toast('Add at least one PNG first.');return;}
     const dpi=Math.max(72,parseInt($('dpi').value)||300);
+    renderDpi=dpi;
     const widthIn=parseFloat($('width').value.replace('custom-',''))||22;
     const gapIn=Math.max(0,parseFloat($('gap').value)||0);
     const maxLenIn=parseFloat($('maxlen').value);
@@ -491,7 +594,7 @@
     const maxLenPx = maxLenIn>0 ? Math.round(maxLenIn*dpi) : 1e9;
 
     // check oversize items
-    const items=buildItems(gapPx);
+    const items=buildItems(gapPx, dpi);
     for(const it of items){
       const fitsNormal = it.w<=binW;
       const fitsRot = allowRotate && it.h<=binW;
@@ -524,15 +627,15 @@
       const ctx=c.getContext('2d');
       inPage.forEach(p=>{
         const it=p.item;
-        coveredArea += it.sw*it.sh;
+        coveredArea += it.dw*it.dh;
         ctx.save();
         const drawX=p.x, drawY=p.y-y0;
         if(p.rot){
           ctx.translate(drawX+p.w/2, drawY+p.h/2);
           ctx.rotate(Math.PI/2);
-          ctx.drawImage(it.d.img, it.sx,it.sy,it.sw,it.sh, -it.sw/2, -it.sh/2, it.sw, it.sh);
+          ctx.drawImage(it.d.img, it.sx,it.sy,it.sw,it.sh, -it.dw/2, -it.dh/2, it.dw, it.dh);
         }else{
-          ctx.drawImage(it.d.img, it.sx,it.sy,it.sw,it.sh, drawX, drawY, it.sw, it.sh);
+          ctx.drawImage(it.d.img, it.sx,it.sy,it.sw,it.sh, drawX, drawY, it.dw, it.dh);
         }
         ctx.restore();
       });
@@ -575,21 +678,25 @@
   $('download').onclick=async ()=>{
     if(pages.length===0) return;
     const base=($('fname').value||'gang-sheet').replace(/[^\w\-]+/g,'-');
+    const dpi=renderDpi||300; // PNGs are tagged with the DPI the sheet was rendered at (300 by default)
     if(pages.length===1){
+      const blob=await canvasToPng(pages[0], dpi);
       const a=document.createElement('a');
-      a.href=pages[0].toDataURL('image/png');
+      a.href=URL.createObjectURL(blob);
       a.download=base+'.png'; a.click();
+      setTimeout(()=>URL.revokeObjectURL(a.href),1500);
       return;
     }
     const zip=new JSZip();
     for(let i=0;i<pages.length;i++){
-      const blob=await new Promise(r=>pages[i].toBlob(r,'image/png'));
+      const blob=await canvasToPng(pages[i], dpi);
       zip.file(`${base}-page-${i+1}.png`,blob);
     }
     const out=await zip.generateAsync({type:'blob'});
     const a=document.createElement('a');
     a.href=URL.createObjectURL(out);
     a.download=base+'.zip'; a.click();
+    setTimeout(()=>URL.revokeObjectURL(a.href),1500);
   };
 
   // ---------- clear ----------
@@ -599,6 +706,29 @@
     $('pages').innerHTML=''; $('stats').style.display='none';
     $('download').disabled=true;
   };
+
+  // ---------- lightbox (expand thumbnail + preview background) ----------
+  const lightbox=$('lightbox'), lbImg=$('lb-img'), lbTitle=$('lb-title'), lbStage=$('lb-stage'), lbColor=$('lb-color');
+  const CHECKER="#0d0f13 url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\"><rect width=\"10\" height=\"10\" fill=\"%23191b20\"/><rect x=\"10\" y=\"10\" width=\"10\" height=\"10\" fill=\"%23191b20\"/><rect x=\"10\" width=\"10\" height=\"10\" fill=\"%2312141a\"/><rect y=\"10\" width=\"10\" height=\"10\" fill=\"%2312141a\"/></svg>')";
+  function setStageBg(val,btn){
+    lbStage.style.background = (val==='transparent') ? CHECKER : val;
+    lbStage.style.backgroundSize='20px';
+    document.querySelectorAll('.lb-bg .sw').forEach(s=>s.classList.remove('on'));
+    if(btn) btn.classList.add('on');
+  }
+  document.querySelectorAll('.lb-bg .sw').forEach(s=>{
+    s.onclick=()=>setStageBg(s.getAttribute('data-bg'), s);
+  });
+  lbColor.addEventListener('input',()=>setStageBg(lbColor.value, null));
+  function openLightbox(d){
+    lbImg.src=d.img.src; lbTitle.textContent=d.name;
+    setStageBg('transparent', document.querySelector('.lb-bg .sw-tr'));
+    lightbox.classList.add('show'); lightbox.setAttribute('aria-hidden','false');
+  }
+  function closeLightbox(){ lightbox.classList.remove('show'); lightbox.setAttribute('aria-hidden','true'); }
+  $('lb-close').onclick=closeLightbox;
+  lightbox.addEventListener('click',e=>{ if(e.target===lightbox) closeLightbox(); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeLightbox(); });
 })();
 </script>
 </body>
