@@ -24,7 +24,7 @@
 <title>Free Gang Sheet Maker | DTF Gang Sheet Builder &amp; Layout Optimizer</title>
 <meta name="description" content="Free DTF gang sheet maker — no account, no fees, no upload. Drop in transparent PNGs, set quantities, and auto-pack them into a print-ready 300 DPI gang sheet that wastes the least film. Runs 100% in your browser.">
 <meta name="keywords" content="free gang sheet maker, DTF gang sheet builder, gang sheet maker, gang sheet builder, DTF gang sheet, gang sheet generator, build a gang sheet online, DTF layout optimizer, 22 inch gang sheet, screen print gang sheet, DTF transfer sheet maker, free gang sheet builder no account">
-<meta name="author" content="DTF.STREAM">
+<meta name="author" content="Matt Marcotte">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
 <meta name="theme-color" content="#0c0d10">
 <link rel="canonical" href="https://freegangsheetmaker.com/">
@@ -58,11 +58,36 @@
   "@context": "https://schema.org",
   "@graph": [
     {
+      "@type": "Person",
+      "@id": "https://freegangsheetmaker.com/#matt",
+      "name": "Matt Marcotte",
+      "url": "https://marcotte.ink/",
+      "jobTitle": "Founder",
+      "description": "Matt Marcotte is the founder of DTF.STREAM and ScreenPrintGPT and the creator of Free Gang Sheet Maker. He builds software and tools for the direct-to-film (DTF) and screen-printing industry.",
+      "knowsAbout": ["DTF printing", "Direct-to-film transfers", "Screen printing", "Gang sheets", "Print shop software"],
+      "sameAs": ["https://marcotte.ink/", "https://dtf.stream/", "https://screenprintgpt.com/"]
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://dtf.stream/#org",
+      "name": "DTF.STREAM",
+      "url": "https://dtf.stream/",
+      "founder": { "@id": "https://freegangsheetmaker.com/#matt" }
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://screenprintgpt.com/#org",
+      "name": "ScreenPrintGPT",
+      "url": "https://screenprintgpt.com/",
+      "founder": { "@id": "https://freegangsheetmaker.com/#matt" }
+    },
+    {
       "@type": "Organization",
       "@id": "https://freegangsheetmaker.com/#org",
       "name": "Free Gang Sheet Maker",
       "url": "https://freegangsheetmaker.com/",
       "logo": "https://freegangsheetmaker.com/favicon.svg",
+      "founder": { "@id": "https://freegangsheetmaker.com/#matt" },
       "sameAs": ["https://dtf.stream/", "https://screenprintgpt.com/"]
     },
     {
@@ -88,6 +113,8 @@
       "screenshot": "https://freegangsheetmaker.com/og-image.png",
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD", "availability": "https://schema.org/InStock" },
       "publisher": { "@id": "https://freegangsheetmaker.com/#org" },
+      "creator": { "@id": "https://freegangsheetmaker.com/#matt" },
+      "author": { "@id": "https://freegangsheetmaker.com/#matt" },
       "description": "A free, browser-based DTF gang sheet maker. Upload transparent PNG designs, set quantities, and automatically pack them into a print-ready gang sheet that minimizes wasted film. No account required and nothing is uploaded to a server.",
       "featureList": [
         "Automatic bin-packing layout optimization that minimizes wasted DTF film",
@@ -229,6 +256,11 @@
   }
   .drop:hover,.drop.drag{border-color:var(--accent);color:var(--text);background:#20242c}
   .drop strong{color:var(--text);display:block;font-size:15px;margin-bottom:3px}
+  .samplerow{margin-top:10px;text-align:center}
+  .samplelink{background:transparent;border:0;color:var(--accent-2);font-size:13px;cursor:pointer;font-weight:600;padding:4px}
+  .samplelink:hover{text-decoration:underline}
+  :focus-visible{outline:2px solid var(--accent-2);outline-offset:2px}
+  @media (prefers-reduced-motion: reduce){*{transition:none !important;animation:none !important;scroll-behavior:auto !important}}
 
   .designs{margin-top:14px;display:flex;flex-direction:column;gap:8px;max-height:380px;overflow:auto}
   .design{display:grid;grid-template-columns:54px 1fr;gap:11px;align-items:start;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:9px}
@@ -305,6 +337,10 @@
   .guides a:hover{border-color:var(--accent);text-decoration:none}
   .guides a b{display:block;font-size:14.5px}
   .guides a span{display:block;color:var(--muted);font-size:12.5px;margin-top:4px}
+  .maker{display:flex;gap:15px;align-items:flex-start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;max-width:760px;margin:14px 0}
+  .maker .av{width:54px;height:54px;border-radius:50%;background:var(--accent);color:#1a1500;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:21px;flex:none}
+  .maker .mtext{font-size:14.5px;color:#c7ccd6}
+  .maker .mtext b{color:var(--text)}
   footer.site{border-top:1px solid var(--line);margin-top:30px;padding:22px 0 40px;color:var(--muted);font-size:13.5px}
   .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--panel-2);border:1px solid var(--line);color:var(--text);padding:11px 18px;border-radius:10px;font-size:14px;opacity:0;pointer-events:none;transition:.2s;z-index:50}
   .toast.show{opacity:1}
@@ -336,6 +372,7 @@
     <nav class="nav">
       <a href="#how">How it works</a>
       <a href="#faq">FAQ</a>
+      <a href="/about/">About</a>
       <a href="https://dtf.stream/" target="_blank" rel="noopener">Order DTF Prints</a>
       <a class="btn" href="https://screenprintgpt.com/" target="_blank" rel="noopener">ScreenPrintGPT</a>
     </nav>
@@ -361,6 +398,7 @@
         or click to browse. We measure each file and pack the tightest layout.
       </div>
       <input type="file" id="file" accept="image/png" multiple class="sr">
+      <div class="samplerow"><button type="button" class="samplelink" id="samples">✨ No files handy? Try it with sample designs</button></div>
       <div class="designs" id="designs" aria-live="polite"></div>
     </div>
 
@@ -516,6 +554,12 @@
       <li><strong>DPI (dots per inch):</strong> print resolution; 300 DPI is the DTF standard for sharp results.</li>
     </ul>
 
+    <h2>About the maker</h2>
+    <div class="maker">
+      <div class="av" aria-hidden="true">MM</div>
+      <div class="mtext"><b>Free Gang Sheet Maker was built by <a href="https://marcotte.ink/" target="_blank" rel="author noopener">Matt Marcotte</a></b>, founder of <a href="https://dtf.stream/" target="_blank" rel="noopener">DTF.STREAM</a> and <a href="https://screenprintgpt.com/" target="_blank" rel="noopener">ScreenPrintGPT</a>. Matt builds software for the direct-to-film and screen-printing industry, and made this tool completely free to help printers gang their designs and cut wasted film. <a href="/about/">More about the maker →</a></div>
+    </div>
+
     <h2>Gang sheet guides</h2>
     <p>New to DTF gang sheets, or want to go deeper? These guides cover everything:</p>
     <div class="guides">
@@ -540,7 +584,7 @@
   </section>
 
   <footer class="site">
-    <div>Made by <a href="https://dtf.stream/" target="_blank" rel="noopener">DTF.STREAM</a> and <a href="https://screenprintgpt.com/" target="_blank" rel="noopener">ScreenPrintGPT</a>. Free DTF gang sheet maker — runs entirely in your browser.</div>
+    <div>Built by <a href="https://marcotte.ink/" target="_blank" rel="author noopener">Matt Marcotte</a>, founder of <a href="https://dtf.stream/" target="_blank" rel="noopener">DTF.STREAM</a> and <a href="https://screenprintgpt.com/" target="_blank" rel="noopener">ScreenPrintGPT</a>. Free DTF gang sheet maker — runs entirely in your browser.</div>
   </footer>
 </div>
 
@@ -645,6 +689,38 @@
     if(added===0) toast('Please drop transparent PNG files.');
     else track('upload_designs',{count:added});
   }
+
+  // ---------- sample designs (lets first-time visitors see the tool work instantly) ----------
+  $('samples').addEventListener('click',()=>{
+    const specs=[
+      {w:900,h:1200,bg:'#3fb6ff',label:'LOGO'},
+      {w:1500,h:600,bg:'#ffd23f',label:'TEXT',fg:'#1a1500'},
+      {w:750,h:750,bg:'#46d39a',label:'BADGE'},
+      {w:1200,h:480,bg:'#ff5d5d',label:'STAMP'}
+    ];
+    let made=0;
+    specs.forEach((s,i)=>{
+      const c=document.createElement('canvas'); c.width=s.w; c.height=s.h;
+      const x=c.getContext('2d');
+      const m=Math.round(Math.min(s.w,s.h)*0.08);
+      const r=24; const w=s.w-m*2, h=s.h-m*2;
+      x.fillStyle=s.bg;
+      x.beginPath();
+      x.moveTo(m+r,m); x.arcTo(m+w,m,m+w,m+h,r); x.arcTo(m+w,m+h,m,m+h,r);
+      x.arcTo(m,m+h,m,m,r); x.arcTo(m,m,m+w,m,r); x.closePath(); x.fill();
+      x.fillStyle=s.fg||'#0c0d10';
+      x.font='bold '+Math.round(Math.min(s.w,s.h)*0.18)+'px system-ui,sans-serif';
+      x.textAlign='center'; x.textBaseline='middle';
+      x.fillText(s.label, s.w/2, s.h/2);
+      const img=new Image();
+      img.onload=()=>{
+        designs.push({id:uid++,name:'sample-'+s.label.toLowerCase(),img,w:s.w,h:s.h,trim:null,trimmed:false,qty:i===1?2:1,dpi:300});
+        if(++made===specs.length){ renderList(); toast('Loaded 4 sample designs — press Render layout.'); }
+      };
+      img.src=c.toDataURL('image/png');
+    });
+    track('load_samples',{count:specs.length});
+  });
 
   // ---------- trim (compute transparent bounding box) ----------
   function computeTrim(d){
