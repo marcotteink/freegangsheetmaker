@@ -1,0 +1,24 @@
+# Free Gang Sheet Maker
+
+> A free, browser-based DTF gang sheet maker and layout optimizer. Upload transparent PNG designs, set quantities, and auto-pack them into a print-ready 300 DPI gang sheet that wastes the least film. No account, no fees, and files are never uploaded — everything runs locally in the browser.
+
+## Key facts
+- URL: https://freegangsheetmaker.com/
+- Cost: 100% free — no account, no watermark, no limits
+- Standard DTF roll width: 22 inches (also supports 13", 17", and 24")
+- Output: print-ready PNG tagged at 300 DPI; long sheets split into a ZIP
+- Privacy: artwork is processed in the browser and never uploaded to a server
+- Optimizer: maximum-rectangles bin packing with optional rotation and transparent-border trim to minimize wasted DTF film
+
+## What it does
+- Builds a DTF gang sheet by uploading transparent PNGs and setting per-design quantities
+- Shows each design's print size in inches with a live effective-DPI quality rating: Ideal (300+), Good (280–299), Not recommended (below 280)
+- Lets you resize designs in inches, choose roll width and gap, and auto-rotate/trim for the tightest layout
+- Reports how much film is actually used so you can see the savings before printing
+- Exports a 300 DPI print-ready file to send to any DTF printer
+
+## Who it is for
+Screen printers, DTF print shops, and small apparel businesses who want to gang many designs onto one transfer sheet to lower cost per print, without signing up for a specific print shop's builder.
+
+## Pages
+- [Free Gang Sheet Maker](https://freegangsheetmaker.com/): the tool plus a how-to guide, DTF gang sheet sizing and DPI guidance, a glossary, and an FAQ.
